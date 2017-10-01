@@ -1,6 +1,6 @@
 {
   "name": "ngx-sin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A util Angular module for handling most common use-cases for forms.",
   "main": "./bundles/ngx-sin.umd.js",
   "module": "./ngx-sin.es5.js",
