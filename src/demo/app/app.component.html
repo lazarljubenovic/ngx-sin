@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label>
+      <span>Username (try also something that contains <i>test</i>)</span>
+      <input type="text" formControlName="username">
+    </label>
+    <div ngxSins="username">
+      <div *ngxSin="'required'">Username is required</div>
+      <div *ngxSin="'minlength'">Username must be at least 2 characters long</div>
+      <div *ngxSin="'maxlength'">Username must be at most 16 characters long</div>
+      <div *ngxSin="'serverError'; let msg">{{ msg }}</div>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email">
+    </label>
+    <div ngxSins="email">
+      <div *ngxSin="'required'">Email is required</div>
+      <div *ngxSin="'email'">Your email seems invalid</div>
+      <div *ngxSin="'serverError'; let msg">{{ msg }}</div>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <label>
+      <span>Password</span>
+      <input type="password" formControlName="password">
+    </label>
+    <div ngxSins="password">
+      <div *ngxSin="'required'">Password is required</div>
+      <div *ngxSin="'minlength'">What kind of short password is that?!</div>
+      <div *ngxSin="'serverError'; let msg">{{ msg }}</div>
+    </div>
+  </div>
+
+  <br>
+
+  <button type="submit">Log in</button>
+
+</form>
