@@ -85,3 +85,39 @@ form = this.fb.group({
 
 </form>
 ```
+
+## Default `when` function
+
+You can provide a `when` function through an input of a same name for each `ngxSin` directive to override the global configuration. The global configuration is provided through an object passed to `.forRoot` static function when importing the module.
+
+The config object has the following interface.
+
+```typescript
+export interface SinModuleConfig {
+  when: WhenFunction;
+}
+```
+
+The function you provide is used to determine when should the error be shown, based on status of the control. The signature of this function is the following.
+
+```typescript
+export interface WhenObject {
+  valid: boolean
+  invalid: boolean
+  pending: boolean
+  enabled: boolean
+  disabled: boolean
+  pristine: boolean
+  dirty: boolean
+  touched: boolean
+  untouched: boolean
+}
+
+export type WhenFunction = (whenObj: WhenObject) => boolean;
+```
+
+The default function is `({dirty, touched}) => dirty && touched`.
+
+## Manually triggering errors when attemting to submit invalid form
+
+This module deals only reducing boilerplate for the templates and centralizing the default behavior of when errors should appear. For less behavioral boilerplate, check out [`ngx-common-forms`](https://github.com/lazarljubenovic/ngx-common-forms).
