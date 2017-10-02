@@ -10,4 +10,4 @@ export interface WhenObject {
   untouched: boolean
 }
 
-export type WhenFunction = (whenObj: WhenObject) => boolean;
+export type WhenFunction = (whenObj: Partial<WhenObject>) => boolean;
