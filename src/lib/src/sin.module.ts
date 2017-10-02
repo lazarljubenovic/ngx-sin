@@ -2,8 +2,8 @@ import {ModuleWithProviders, NgModule} from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {ReactiveFormsModule} from '@angular/forms'
 import {SinDirective} from './sin.directive'
-import {SIN_CONFIG} from './sin-when-fn'
-import {SinsDirective} from './wrap.directive'
+import {SIN_CONFIG} from './sin-config'
+import {SinsDirective} from './sins.directive'
 import {WhenFunction} from './interfaces'
 
 export interface SinModuleConfig {

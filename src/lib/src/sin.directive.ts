@@ -11,7 +11,7 @@ import {AbstractControl} from '@angular/forms'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
 import 'rxjs/add/observable/fromEvent'
-import {SIN_CONFIG} from './sin-when-fn'
+import {SIN_CONFIG} from './sin-config'
 import {WhenFunction, WhenObject} from './interfaces'
 import {SinModuleConfig} from './sin.module'
 
