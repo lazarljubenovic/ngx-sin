@@ -33,7 +33,7 @@ export const DEFAULT: SinModuleConfig = {
   ],
 })
 export class SinModule {
-  public static forRoot(config?: SinModuleConfig): ModuleWithProviders {
+  public static forRoot(config?: Partial<SinModuleConfig>): ModuleWithProviders {
     return {
       ngModule: SinModule,
       providers: [
