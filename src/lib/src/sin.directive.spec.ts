@@ -64,6 +64,22 @@ describe(`Sin Directive`, () => {
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1)
     })
 
+    it(`should appear and disappear when error is fixed, and disappear again`, () => {
+      testHost.form.setValue({username: ''}) // invalid
+      testHost.form.get('username').markAsTouched()
+      testHost.form.get('username').markAsDirty()
+      fixture.detectChanges()
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1, 'appeared after error')
+
+      testHost.form.setValue({username: 'valid'})
+      fixture.detectChanges()
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(0, 'disappeared')
+
+      testHost.form.setValue({username: ''})
+      fixture.detectChanges()
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1, 'appeared again')
+    })
+
   })
 
 
