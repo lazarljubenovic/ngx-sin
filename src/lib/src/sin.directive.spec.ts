@@ -154,6 +154,37 @@ describe(`Sin Directive`, () => {
 
   })
 
+  describe(`without a control`, () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [ReactiveFormsModule, SinModule.forRoot()],
+      }).overrideComponent(TestComponent, {
+        set: {
+          template: `
+           <form [formGroup]="form">
+              <label>
+                <span>Username</span>
+                <input type="text" formControlName="username">
+              </label>
+              <div *ngxSin="'required'">Username is required</div>
+            </form>
+          `,
+        }
+      }).compileComponents()
+    }))
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent)
+    })
+
+    it(`should throw`, () => {
+      expect(() => fixture.detectChanges()).toThrow(new Error('No control specified for ngxSin.'))
+    })
+
+  })
+
 
 })
 

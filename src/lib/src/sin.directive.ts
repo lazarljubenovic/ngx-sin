@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import {Directive, DoCheck, EmbeddedViewRef, Inject, Input, OnInit, Optional, TemplateRef, ViewContainerRef} from '@angular/core'
+import {Directive, DoCheck, EmbeddedViewRef, Inject, Input, isDevMode, OnInit, Optional, TemplateRef, ViewContainerRef} from '@angular/core'
 import {AbstractControl} from '@angular/forms'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
@@ -42,6 +42,10 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   public ngOnInit(): void {
     if (this.sinsDirective) {
       this.control = this.sinsDirective.control
+    }
+
+    if (isDevMode() && this.control == null) {
+      throw new Error(`No control specified for ngxSin.`)
     }
   }
 
