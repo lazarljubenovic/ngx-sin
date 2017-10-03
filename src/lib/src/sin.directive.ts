@@ -1,12 +1,5 @@
-import {
-  Directive,
-  DoCheck,
-  EmbeddedViewRef,
-  Inject,
-  Input,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core'
+// tslint:disable:max-line-length
+import {Directive, DoCheck, EmbeddedViewRef, Inject, Input, OnInit, Optional, TemplateRef, ViewContainerRef} from '@angular/core'
 import {AbstractControl} from '@angular/forms'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
@@ -14,9 +7,11 @@ import 'rxjs/add/observable/fromEvent'
 import {SIN_CONFIG} from './sin-config'
 import {WhenFunction, WhenObject} from './interfaces'
 import {SinModuleConfig} from './sin.module'
+import {SinsDirective} from './sins.directive'
+// tsling:enable:max-line-length
 
 @Directive({selector: '[ngxSin]'})
-export class SinDirective implements DoCheck, SinModuleConfig {
+export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   @Input('ngxSin') error: string
 
@@ -40,7 +35,14 @@ export class SinDirective implements DoCheck, SinModuleConfig {
 
   constructor(private templateRef: TemplateRef<any>,
               private viewContainerRef: ViewContainerRef,
-              @Inject(SIN_CONFIG) private config: SinModuleConfig) {
+              @Inject(SIN_CONFIG) private config: SinModuleConfig,
+              @Optional() private sinsDirective: SinsDirective) {
+  }
+
+  public ngOnInit(): void {
+    if (this.sinsDirective) {
+      this.control = this.sinsDirective.control
+    }
   }
 
   public ngDoCheck(): void {
