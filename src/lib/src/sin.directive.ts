@@ -53,7 +53,9 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   }
 
   private initialize() {
-    Object.assign(this, this.config)
+    if (this.when == null) {
+      this.when = this.config.when;
+    }
 
     this.initialized = true
   }
