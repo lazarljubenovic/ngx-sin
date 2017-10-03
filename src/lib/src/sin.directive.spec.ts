@@ -1,4 +1,3 @@
-// tslint:disable:no-shadowed-variable
 import {Component} from '@angular/core'
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {async, ComponentFixture, TestBed} from '@angular/core/testing'
