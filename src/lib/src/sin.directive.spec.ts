@@ -1,3 +1,4 @@
+// tslint:disable:no-shadowed-variable
 import {Component} from '@angular/core'
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {async, ComponentFixture, TestBed} from '@angular/core/testing'
@@ -19,6 +20,8 @@ class TestComponent {
   form = this.fb.group({
     username: ['', [Validators.required]],
   })
+
+  always = () => true
 
   constructor(private fb: FormBuilder) {
   }
@@ -112,6 +115,42 @@ describe(`Sin Directive`, () => {
       fixture.detectChanges()
       expect(fixture.debugElement.queryAll(By.css('div')).length)
         .toBe(1, `visible error when dirty`)
+    })
+
+  })
+
+
+  describe(`with custom when function through input`, () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [ReactiveFormsModule, SinModule.forRoot()],
+      }).overrideComponent(TestComponent, {
+        set: {
+          template: `
+            <form [formGroup]="form">
+              <label>
+                <span>Username</span>
+                <input type="text" formControlName="username">
+              </label>
+              <div *ngxSin="'required'; control: form.get('username'); when: always">
+                Username is required
+              </div>
+            </form>
+          `
+        }
+      }).compileComponents()
+    }))
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent)
+      testHost = fixture.componentInstance
+      fixture.detectChanges()
+    })
+
+    it(`should display error immediately`, () => {
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1)
     })
 
   })
