@@ -55,13 +55,6 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   private initialize() {
     Object.assign(this, this.config)
 
-    this.control.valueChanges
-      .merge(this.control.statusChanges, ([value]: any[]) => value)
-      .startWith(this.control.value)
-      .subscribe(value => {
-        this.evaluate()
-      })
-
     this.initialized = true
   }
 
