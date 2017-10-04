@@ -10,14 +10,6 @@ export interface SinModuleConfig {
   when: WhenFunction;
 }
 
-export function DEFAULT_WHEN_FN({dirty, touched}: any) {
-  return dirty && touched
-}
-
-export const DEFAULT: SinModuleConfig = {
-  when: DEFAULT_WHEN_FN,
-}
-
 @NgModule({
   imports: [
     CommonModule,
@@ -39,7 +31,13 @@ export class SinModule {
       providers: [
         {
           provide: SIN_CONFIG,
-          useValue: {...DEFAULT, ...(config || {})},
+          useValue: {
+            ...{
+              when: function DEFAULT_WHEN_FN({dirty, touched}: any) {
+                return dirty && touched
+              },
+            }, ...(config || {})
+          },
         },
       ],
     }
