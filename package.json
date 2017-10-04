@@ -1,6 +1,6 @@
 {
   "name": "ngx-sin",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A util Angular module for handling displaying error messages in forms.",
   "main": "./bundles/ngx-sin.umd.js",
   "module": "./ngx-sin.es5.js",
