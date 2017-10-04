@@ -6,8 +6,7 @@ import 'rxjs/add/operator/merge'
 import 'rxjs/add/observable/fromEvent'
 import {SIN_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
-import {SinModuleConfig} from '../../../out-tsc/lib/src/sin.module'
-import {WhenFunction, WhenObject} from './interfaces'
+import {SinModuleConfig, WhenFunction, WhenObject} from './interfaces'
 // tsling:enable:max-line-length
 
 @Directive({selector: '[ngxSin]'})
