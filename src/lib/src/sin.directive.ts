@@ -5,9 +5,9 @@ import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
 import 'rxjs/add/observable/fromEvent'
 import {SIN_CONFIG} from './sin-config'
-import {WhenFunction, WhenObject} from './interfaces'
-import {SinModuleConfig} from './sin.module'
 import {SinsDirective} from './sins.directive'
+import {SinModuleConfig} from '../../../out-tsc/lib/src/sin.module'
+import {WhenFunction, WhenObject} from './interfaces'
 // tsling:enable:max-line-length
 
 @Directive({selector: '[ngxSin]'})
@@ -58,7 +58,7 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   private initialize() {
     if (this.when == null) {
-      this.when = this.config.when;
+      this.when = this.config.when
     }
 
     this.initialized = true

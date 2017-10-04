@@ -4,11 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms'
 import {SinDirective} from './sin.directive'
 import {SIN_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
-import {WhenFunction} from './interfaces'
-
-export interface SinModuleConfig {
-  when: WhenFunction;
-}
+import {SinModuleConfig} from './interfaces'
 
 @NgModule({
   imports: [

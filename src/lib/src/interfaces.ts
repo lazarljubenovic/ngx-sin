@@ -11,3 +11,7 @@ export interface WhenObject {
 }
 
 export type WhenFunction = (whenObj: Partial<WhenObject>) => boolean;
+
+export interface SinModuleConfig {
+  when: WhenFunction;
+}
