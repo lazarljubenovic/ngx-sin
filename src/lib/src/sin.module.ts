@@ -15,7 +15,7 @@ export const defaultConfig = {
 }
 
 export function factory(config?: Partial<SinModuleConfig>): SinModuleConfig {
-  return Object.assign(defaultConfig, config || {})
+  return Object.assign({}, defaultConfig, config || {})
 }
 
 @NgModule({
@@ -45,7 +45,7 @@ export class SinModule {
           provide: SIN_FULL_CONFIG,
           useFactory: factory,
           deps: [SIN_CONFIG],
-        }
+        },
       ],
     }
   }

@@ -1,5 +1,16 @@
 // tslint:disable:max-line-length
-import {Directive, DoCheck, EmbeddedViewRef, Inject, Input, isDevMode, OnInit, Optional, TemplateRef, ViewContainerRef} from '@angular/core'
+import {
+  Directive,
+  DoCheck,
+  EmbeddedViewRef,
+  Inject,
+  Input,
+  isDevMode,
+  OnInit,
+  Optional,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core'
 import {AbstractControl} from '@angular/forms'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
@@ -14,6 +25,7 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   @Input('ngxSin') error: string
 
+  private _controlWithErrors: AbstractControl
   private _control: AbstractControl
 
   @Input('ngxSinControl')
@@ -22,8 +34,17 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
     this.initialize()
   }
 
-  public get control() {
+  public get control(): AbstractControl {
     return this._control
+  }
+
+  @Input('ngxSinErrorFromControl')
+  public set controlWithErrors(control: AbstractControl) {
+    this._controlWithErrors = control
+  }
+
+  public get controlWithErrors(): AbstractControl {
+    return this._controlWithErrors || this.control
   }
 
   private embeddedViewRef: EmbeddedViewRef<any>
@@ -43,7 +64,7 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
       this.control = this.sinsDirective.control
     }
 
-    if (isDevMode() && this.control == null) {
+    if (isDevMode() && this.controlWithErrors == null) {
       throw new Error(`No control specified for ngxSin.`)
     }
   }
@@ -64,19 +85,20 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   }
 
   private evaluate() {
+    const whenControl = this.control
     const whenObj: WhenObject = {
-      disabled: this.control.disabled,
-      dirty: this.control.dirty,
-      enabled: this.control.enabled,
-      invalid: this.control.invalid,
-      pending: this.control.pending,
-      pristine: this.control.pristine,
-      touched: this.control.touched,
-      untouched: this.control.untouched,
-      valid: this.control.valid,
+      disabled: whenControl.disabled,
+      dirty: whenControl.dirty,
+      enabled: whenControl.enabled,
+      invalid: whenControl.invalid,
+      pending: whenControl.pending,
+      pristine: whenControl.pristine,
+      touched: whenControl.touched,
+      untouched: whenControl.untouched,
+      valid: whenControl.valid,
     }
 
-    const hasError = this.control.hasError(this.error)
+    const hasError = this.controlWithErrors.hasError(this.error)
     const shouldDisplay = this.when(whenObj)
 
     if (hasError && shouldDisplay) {
@@ -89,7 +111,7 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   private create() {
     if (this.embeddedViewRef == null) {
       this.embeddedViewRef = this.viewContainerRef
-        .createEmbeddedView(this.templateRef, {$implicit: this.control.errors[this.error]})
+        .createEmbeddedView(this.templateRef, {$implicit: this.controlWithErrors.errors[this.error]})
     }
   }
 

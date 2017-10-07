@@ -1,6 +1,6 @@
 import {Component} from '@angular/core'
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
-import {async, ComponentFixture, TestBed} from '@angular/core/testing'
+import {ComponentFixture, TestBed} from '@angular/core/testing'
 import {SinModule} from './sin.module'
 import {By} from '@angular/platform-browser'
 
@@ -33,12 +33,12 @@ describe(`Sin Directive`, () => {
 
   describe(`with default when function`, () => {
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
         imports: [ReactiveFormsModule, SinModule.forRoot()],
       }).compileComponents()
-    }))
+    })
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent)
@@ -87,7 +87,7 @@ describe(`Sin Directive`, () => {
 
   describe(`with custom when function provided through module`, () => {
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
         imports: [
@@ -95,7 +95,7 @@ describe(`Sin Directive`, () => {
           SinModule.forRoot({when: ({dirty}) => dirty}),
         ],
       }).compileComponents()
-    }))
+    })
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent)
@@ -121,7 +121,7 @@ describe(`Sin Directive`, () => {
 
   describe(`with custom when function through input`, () => {
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
         imports: [ReactiveFormsModule, SinModule.forRoot()],
@@ -140,7 +140,7 @@ describe(`Sin Directive`, () => {
           `,
         },
       }).compileComponents()
-    }))
+    })
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent)
@@ -156,7 +156,7 @@ describe(`Sin Directive`, () => {
 
   describe(`without a control`, () => {
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
         imports: [ReactiveFormsModule, SinModule.forRoot()],
@@ -173,7 +173,7 @@ describe(`Sin Directive`, () => {
           `,
         },
       }).compileComponents()
-    }))
+    })
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent)
@@ -244,9 +244,9 @@ describe(`Sin Directive`, () => {
   let fixture: ComponentFixture<TestComponent>
   let testHost: TestComponent
 
-  describe(`track different control for when fn`, () => {
+  describe(`pizza!`, () => {
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
         imports: [
@@ -254,7 +254,7 @@ describe(`Sin Directive`, () => {
           SinModule.forRoot(),
         ],
       }).compileComponents()
-    }))
+    })
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent)
@@ -262,29 +262,16 @@ describe(`Sin Directive`, () => {
       fixture.detectChanges()
     })
 
-    it(`should display error after editing username`, () => {
+    it(`should demonstrate a common problem`, () => {
       // because it tracks state of the group
       expect(fixture.debugElement.queryAll(By.css('div.username,div.allEqual')).length)
         .toBe(0, `no errors initially`)
 
-      expect(testHost.form.get('username').pristine).toBe(true, `username is pristine`)
-      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
-      expect(testHost.form.pristine).toBe(true, `form is pristine`)
-      expect(testHost.form.untouched).toBe(true, `form is untouched`)
-
       testHost.form.get('username').setValue('username')
       fixture.detectChanges()
-      expect(testHost.form.get('username').pristine).toBe(true, `username is pristine`)
-      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
-      expect(testHost.form.pristine).toBe(true, `form is pristine`)
-      expect(testHost.form.untouched).toBe(true, `form is untouched`)
 
       testHost.form.get('username').markAsDirty()
       fixture.detectChanges()
-      expect(testHost.form.get('username').pristine).toBe(false, `username is not pristine`)
-      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
-      expect(testHost.form.pristine).toBe(false, `form is note pristine anymore`)
-      expect(testHost.form.untouched).toBe(true, `form is untouched`)
 
       // still did not blur
       expect(fixture.debugElement.queryAll(By.css('div.username')).length)
@@ -294,8 +281,6 @@ describe(`Sin Directive`, () => {
 
       testHost.form.get('username').markAsTouched()
       fixture.detectChanges()
-      expect(testHost.form.touched).toBe(true, `form is touched`)
-      expect(testHost.form.dirty).toBe(true, `form is dirty`)
       expect(fixture.debugElement.queryAll(By.css('div.username')).length)
         .toBe(0, `no username error because required is ok`)
       expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
@@ -304,14 +289,80 @@ describe(`Sin Directive`, () => {
       testHost.form.get('pwd1').setValue('q') // start typing
       testHost.form.get('pwd1').markAsDirty() // imitate how it'll actually work when user types
       fixture.detectChanges()
-      expect(testHost.form.touched).toBe(true, `form is touched`)
-      expect(testHost.form.dirty).toBe(true, `form is dirty`)
-      expect(testHost.form.get('pwd1').touched).toBe(false, `pwd1 not yet touched`)
-      expect(testHost.form.get('pwd1').dirty).toBe(true, `dirty because user is typing`)
       expect(fixture.debugElement.queryAll(By.css('div.username')).length)
         .toBe(0, `no username error because required is ok`)
       expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
         .toBe(1, `pwd already visible because 'q' != ''`)
+    })
+
+  })
+
+})
+
+
+describe(`Sin Directive`, () => {
+
+  @Component({
+    template: `
+      <form [formGroup]="form">
+        <input type="password" formControlName="pwd1">
+        <div class="pwd1" *ngxSin="'required'; control: form.get('pwd1')">pwd1</div>
+        <input type="password" formControlName="pwd2">
+        <div class="pwd2" *ngxSin="'required'; control: form.get('pwd2')">pwd2</div>
+
+        <div class="allEqual"
+             *ngxSin="'allEqual'; control: form.get('pwd2'); errorFromControl: form"
+        >
+          Passwords don't match
+        </div>
+      </form>
+    `,
+  })
+  class TestComponent {
+    form = this.fb.group({
+      pwd1: ['', [Validators.required]],
+      pwd2: ['', [Validators.required]],
+    }, {
+      validator: allEqual('pwd1', 'pwd2'),
+    })
+
+    constructor(private fb: FormBuilder) {
+    }
+  }
+
+  let fixture: ComponentFixture<TestComponent>
+  let testHost: TestComponent
+
+  describe(`track different control for getting error`, () => {
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [
+          ReactiveFormsModule,
+          SinModule.forRoot(),
+        ],
+      }).compileComponents()
+    })
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent)
+      testHost = fixture.componentInstance
+      fixture.detectChanges()
+    })
+
+    it(`should should display error after blurring away from pwd2`, () => {
+      testHost.form.get('pwd1').setValue('password')
+      testHost.form.get('pwd1').markAsDirty()
+      testHost.form.get('pwd1').markAsTouched()
+      testHost.form.get('pwd2').setValue('passwor')
+      testHost.form.get('pwd2').markAsDirty()
+
+      fixture.detectChanges()
+      expect(testHost.form.get('pwd2').dirty).toBe(true, `pwd2 is dirty`)
+      expect(testHost.form.get('pwd2').untouched).toBe(true, `pwd2 is untouched`)
+      expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
+        .toBe(0, `no error visible because pwd2 is still untouched`)
     })
 
   })
