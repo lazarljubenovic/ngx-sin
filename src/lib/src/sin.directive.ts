@@ -36,7 +36,6 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
               private viewContainerRef: ViewContainerRef,
               @Inject(SIN_FULL_CONFIG) private config: SinModuleConfig,
               @Optional() private sinsDirective: SinsDirective) {
-    console.log('injected config', config);
   }
 
   public ngOnInit(): void {

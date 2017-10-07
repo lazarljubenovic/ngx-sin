@@ -38,7 +38,7 @@
     "integration:aot": "cd integration && npm run e2e:aot",
     "lint": "tslint .src/**/*.ts -t verbose",
     "release": "standard-version",
-    "release:auto": "npm run release && npm run build && git push --follow-tags origin master && npm publish dist"
+    "release:auto": "npm run build && npm run test:once && npm run release && npm run build && git push --follow-tags origin master && npm publish dist"
   },
   "peerDependencies": {
     "@angular/core": ">=4.0.0",
