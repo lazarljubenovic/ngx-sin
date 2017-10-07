@@ -4,7 +4,7 @@ import {AbstractControl} from '@angular/forms'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/merge'
 import 'rxjs/add/observable/fromEvent'
-import {SIN_CONFIG} from './sin-config'
+import {SIN_FULL_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
 import {SinModuleConfig, WhenFunction, WhenObject} from './interfaces'
 // tsling:enable:max-line-length
@@ -34,8 +34,9 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   constructor(private templateRef: TemplateRef<any>,
               private viewContainerRef: ViewContainerRef,
-              @Inject(SIN_CONFIG) private config: SinModuleConfig,
+              @Inject(SIN_FULL_CONFIG) private config: SinModuleConfig,
               @Optional() private sinsDirective: SinsDirective) {
+    console.log('injected config', config);
   }
 
   public ngOnInit(): void {
