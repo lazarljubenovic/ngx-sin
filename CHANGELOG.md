@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.7"></a>
+## [0.0.7](https://github.com/lazarljubenovic/ngx-sin/compare/v0.0.6...v0.0.7) (2017-10-07)
+
+
+### Bug Fixes
+
+* use a factory ([3169bcd](https://github.com/lazarljubenovic/ngx-sin/commit/3169bcd))
+
+
+
 <a name="0.0.6"></a>
 ## [0.0.6](https://github.com/lazarljubenovic/ngx-sin/compare/v0.0.5...v0.0.6) (2017-10-04)
 
