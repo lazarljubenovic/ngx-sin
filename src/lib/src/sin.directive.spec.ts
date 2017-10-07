@@ -84,6 +84,48 @@ describe(`Sin Directive`, () => {
 
   })
 
+  describe(`usage of ngxSinName as a shortcut to ngxSinControl`, () => {
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [ReactiveFormsModule, SinModule.forRoot({when: () => true})],
+      }).overrideComponent(TestComponent, {
+        set: {
+          template: `
+            <form [formGroup]="form">
+              <label>
+                <span>Username</span>
+                <input type="text" formControlName="username">
+              </label>
+              <div *ngxSin="'required'; name: 'username'">Username is required</div>
+            </form>
+          `,
+        },
+      }).compileComponents()
+    })
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent)
+      testHost = fixture.componentInstance
+      fixture.detectChanges()
+    })
+
+    it(`should not appear when valid`, () => {
+      testHost.form.setValue({username: 'valid'})
+      fixture.detectChanges()
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(0)
+    })
+
+    it(`should appear when invalid, touched and pristine`, () => {
+      testHost.form.get('username').markAsTouched()
+      testHost.form.get('username').markAsDirty()
+      fixture.detectChanges()
+      expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1)
+    })
+
+  })
+
 
   describe(`with custom when function provided through module`, () => {
 
