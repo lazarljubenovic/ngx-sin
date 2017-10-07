@@ -18,7 +18,14 @@ import 'rxjs/add/observable/fromEvent'
 import {SIN_FULL_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
 import {SinModuleConfig, WhenFunction, WhenObject} from './interfaces'
+import {Subject} from 'rxjs/Subject'
 // tsling:enable:max-line-length
+
+export interface SinNotification {
+  type: 'add' | 'remove'
+  control: AbstractControl
+  error: any
+}
 
 @Directive({selector: '[ngxSin]'})
 export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
@@ -51,6 +58,8 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   }
 
   @Input('ngxSinWhen') when: WhenFunction
+
+  public errorChanges$ = new Subject<SinNotification>()
 
   private embeddedViewRef: EmbeddedViewRef<any>
   private initialized: boolean = false
@@ -136,13 +145,17 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   private create() {
     if (this.embeddedViewRef == null) {
+      const error = this.controlWithErrors.errors[this.error]
+      this.errorChanges$.next({type: 'add', control: this.control, error})
       this.embeddedViewRef = this.viewContainerRef
-        .createEmbeddedView(this.templateRef, {$implicit: this.controlWithErrors.errors[this.error]})
+        .createEmbeddedView(this.templateRef, {$implicit: error})
     }
   }
 
   private destroy() {
     if (this.embeddedViewRef != null) {
+      this.errorChanges$
+        .next({type: 'remove', error: this.embeddedViewRef.context, control: this.control})
       this.embeddedViewRef.destroy()
       this.embeddedViewRef = null
     }

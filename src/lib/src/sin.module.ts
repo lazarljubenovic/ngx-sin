@@ -5,6 +5,7 @@ import {SinDirective} from './sin.directive'
 import {SIN_CONFIG, SIN_FULL_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
 import {SinModuleConfig, WhenObject} from './interfaces'
+import {FormWithSinsDirective} from './form-with-sins.directive'
 
 export function when({dirty, touched}: Partial<WhenObject>) {
   return dirty && touched
@@ -26,10 +27,12 @@ export function factory(config?: Partial<SinModuleConfig>): SinModuleConfig {
   declarations: [
     SinDirective,
     SinsDirective,
+    FormWithSinsDirective,
   ],
   exports: [
     SinDirective,
     SinsDirective,
+    FormWithSinsDirective,
   ],
 })
 export class SinModule {

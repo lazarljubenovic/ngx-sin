@@ -1,3 +1,5 @@
 export * from './src/interfaces'
 export {SinModule} from './src/sin.module'
 export {SinDirective} from './src/sin.directive'
+export {SinsDirective} from './src/sins.directive'
+export {FormWithSinsDirective} from './src/form-with-sins.directive'

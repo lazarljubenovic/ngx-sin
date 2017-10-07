@@ -46,16 +46,21 @@ describe(`Sin Directive`, () => {
       fixture.detectChanges()
     })
 
+    const hasInvalidClass = () =>
+      fixture.debugElement.query(By.css('input')).classes['ngx-sin-invalid']
+
     it(`should not appear when valid`, () => {
       testHost.form.setValue({username: 'valid'})
       fixture.detectChanges()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(0)
+      expect(hasInvalidClass()).toBeFalsy()
     })
 
     it(`should not appear when invalid but untouched and pristine`, () => {
       testHost.form.setValue({username: ''}) // invalid
       fixture.detectChanges()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(0)
+      expect(hasInvalidClass()).toBeFalsy()
     })
 
     it(`should appear when invalid, touched and pristine`, () => {
@@ -64,6 +69,7 @@ describe(`Sin Directive`, () => {
       testHost.form.get('username').markAsDirty()
       fixture.detectChanges()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1)
+      expect(hasInvalidClass()).toBeTruthy()
     })
 
     it(`should appear and disappear when error is fixed, and disappear again`, () => {
@@ -71,14 +77,17 @@ describe(`Sin Directive`, () => {
       testHost.form.get('username').markAsTouched()
       testHost.form.get('username').markAsDirty()
       fixture.detectChanges()
+      expect(hasInvalidClass()).toBeTruthy()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1, 'appeared after error')
 
       testHost.form.setValue({username: 'valid'})
       fixture.detectChanges()
+      expect(hasInvalidClass()).toBeFalsy()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(0, 'disappeared')
 
       testHost.form.setValue({username: ''})
       fixture.detectChanges()
+      expect(hasInvalidClass()).toBeTruthy()
       expect(fixture.debugElement.queryAll(By.css('div')).length).toBe(1, 'appeared again')
     })
 

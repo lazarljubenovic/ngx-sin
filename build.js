@@ -75,6 +75,7 @@ return Promise.resolve()
         'rxjs/add/observable/fromEvent': 'Rx.Observable',
         'rxjs/add/operator/startWith': 'Rx.Observable.prototype',
         'rxjs/add/operator/merge': 'Rx.Observable.prototype',
+        'rxjs/add/operator/takeUtil': 'Rx.Observable.prototype',
       },
       external: [
         // List of dependencies
@@ -87,6 +88,7 @@ return Promise.resolve()
         'rxjs/add/observable/fromEvent',
         'rxjs/add/operator/startWith',
         'rxjs/add/operator/merge',
+        'rxjs/add/operator/takeUntil',
       ],
       plugins: [
         commonjs({
