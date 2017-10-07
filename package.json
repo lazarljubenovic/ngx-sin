@@ -1,6 +1,6 @@
 {
   "name": "ngx-sin",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A util Angular module for handling displaying error messages in forms.",
   "main": "./bundles/ngx-sin.umd.js",
   "module": "./ngx-sin.es5.js",
@@ -37,7 +37,8 @@
     "integration:jit": "cd integration && npm run e2e",
     "integration:aot": "cd integration && npm run e2e:aot",
     "lint": "tslint .src/**/*.ts -t verbose",
-    "release": "standard-version"
+    "release": "standard-version",
+    "release:auto": "npm run release && npm run build && git push --follow-tags origin master && npm publish dist"
   },
   "peerDependencies": {
     "@angular/core": ">=4.0.0",
