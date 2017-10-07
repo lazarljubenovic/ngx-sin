@@ -1,35 +1,35 @@
 import {Component} from '@angular/core'
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
+import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {async, ComponentFixture, TestBed} from '@angular/core/testing'
 import {SinModule} from './sin.module'
 import {By} from '@angular/platform-browser'
 
-@Component({
-  template: `
-    <form [formGroup]="form">
-      <label>
-        <span>Username</span>
-        <input type="text" formControlName="username">
-      </label>
-      <div *ngxSin="'required'; control: form.get('username')">Username is required</div>
-    </form>
-  `,
-})
-class TestComponent {
-  form = this.fb.group({
-    username: ['', [Validators.required]],
-  })
-
-  always = () => true
-
-  constructor(private fb: FormBuilder) {
-  }
-}
-
-let fixture: ComponentFixture<TestComponent>
-let testHost: TestComponent
-
 describe(`Sin Directive`, () => {
+
+  @Component({
+    template: `
+      <form [formGroup]="form">
+        <label>
+          <span>Username</span>
+          <input type="text" formControlName="username">
+        </label>
+        <div *ngxSin="'required'; control: form.get('username')">Username is required</div>
+      </form>
+    `,
+  })
+  class TestComponent {
+    form = this.fb.group({
+      username: ['', [Validators.required]],
+    })
+
+    always = () => true
+
+    constructor(private fb: FormBuilder) {
+    }
+  }
+
+  let fixture: ComponentFixture<TestComponent>
+  let testHost: TestComponent
 
   describe(`with default when function`, () => {
 
@@ -137,8 +137,8 @@ describe(`Sin Directive`, () => {
                 Username is required
               </div>
             </form>
-          `
-        }
+          `,
+        },
       }).compileComponents()
     }))
 
@@ -163,7 +163,7 @@ describe(`Sin Directive`, () => {
       }).overrideComponent(TestComponent, {
         set: {
           template: `
-           <form [formGroup]="form">
+            <form [formGroup]="form">
               <label>
                 <span>Username</span>
                 <input type="text" formControlName="username">
@@ -171,7 +171,7 @@ describe(`Sin Directive`, () => {
               <div *ngxSin="'required'">Username is required</div>
             </form>
           `,
-        }
+        },
       }).compileComponents()
     }))
 
@@ -185,6 +185,136 @@ describe(`Sin Directive`, () => {
 
   })
 
+})
+
+
+function allEqual(...controlNames: string[]) {
+  return function (control: AbstractControl) {
+    if (controlNames.length == 0) {
+      return null
+    }
+
+    const values = controlNames.map(name => control.get(name).value)
+    const referenceValue = values[0]
+    const areAllEqual = values.every(value => value == referenceValue)
+
+    if (areAllEqual) {
+      return null
+    } else {
+      return {allEqual: true}
+    }
+  }
+}
+
+
+describe(`Sin Directive`, () => {
+
+  @Component({
+    template: `
+      <form [formGroup]="form">
+        <input type="text" formControlName="username">
+        <div class="username"
+             *ngxSin="'username'; control: form.get('username')"
+        >
+          Username is required
+        </div>
+        <input type="password" formControlName="pwd1">
+        <input type="password" formControlName="pwd2">
+        <div class="allEqual"
+             *ngxSin="'allEqual'; control: form"
+        >
+          Passwords don't match
+        </div>
+      </form>
+    `,
+  })
+  class TestComponent {
+    form = this.fb.group({
+      username: ['', [Validators.required]],
+      pwd1: [''],
+      pwd2: [''],
+    }, {
+      validator: allEqual('pwd1', 'pwd2'),
+    })
+
+    constructor(private fb: FormBuilder) {
+    }
+  }
+
+  let fixture: ComponentFixture<TestComponent>
+  let testHost: TestComponent
+
+  describe(`track different control for when fn`, () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [
+          ReactiveFormsModule,
+          SinModule.forRoot(),
+        ],
+      }).compileComponents()
+    }))
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent)
+      testHost = fixture.componentInstance
+      fixture.detectChanges()
+    })
+
+    it(`should display error after editing username`, () => {
+      // because it tracks state of the group
+      expect(fixture.debugElement.queryAll(By.css('div.username,div.allEqual')).length)
+        .toBe(0, `no errors initially`)
+
+      expect(testHost.form.get('username').pristine).toBe(true, `username is pristine`)
+      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
+      expect(testHost.form.pristine).toBe(true, `form is pristine`)
+      expect(testHost.form.untouched).toBe(true, `form is untouched`)
+
+      testHost.form.get('username').setValue('username')
+      fixture.detectChanges()
+      expect(testHost.form.get('username').pristine).toBe(true, `username is pristine`)
+      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
+      expect(testHost.form.pristine).toBe(true, `form is pristine`)
+      expect(testHost.form.untouched).toBe(true, `form is untouched`)
+
+      testHost.form.get('username').markAsDirty()
+      fixture.detectChanges()
+      expect(testHost.form.get('username').pristine).toBe(false, `username is not pristine`)
+      expect(testHost.form.get('username').untouched).toBe(true, `username is untouched`)
+      expect(testHost.form.pristine).toBe(false, `form is note pristine anymore`)
+      expect(testHost.form.untouched).toBe(true, `form is untouched`)
+
+      // still did not blur
+      expect(fixture.debugElement.queryAll(By.css('div.username')).length)
+        .toBe(0, `no username error because its ok`)
+      expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
+        .toBe(0, `no pwd errors before blurring away from username`)
+
+      testHost.form.get('username').markAsTouched()
+      fixture.detectChanges()
+      expect(testHost.form.touched).toBe(true, `form is touched`)
+      expect(testHost.form.dirty).toBe(true, `form is dirty`)
+      expect(fixture.debugElement.queryAll(By.css('div.username')).length)
+        .toBe(0, `no username error because required is ok`)
+      expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
+        .toBe(0, `no pwd error yet because '' == ''`)
+
+      testHost.form.get('pwd1').setValue('q') // start typing
+      testHost.form.get('pwd1').markAsDirty() // imitate how it'll actually work when user types
+      fixture.detectChanges()
+      expect(testHost.form.touched).toBe(true, `form is touched`)
+      expect(testHost.form.dirty).toBe(true, `form is dirty`)
+      expect(testHost.form.get('pwd1').touched).toBe(false, `pwd1 not yet touched`)
+      expect(testHost.form.get('pwd1').dirty).toBe(true, `dirty because user is typing`)
+      expect(fixture.debugElement.queryAll(By.css('div.username')).length)
+        .toBe(0, `no username error because required is ok`)
+      expect(fixture.debugElement.queryAll(By.css('div.allEqual')).length)
+        .toBe(1, `pwd already visible because 'q' != ''`)
+    })
+
+  })
 
 })
 
