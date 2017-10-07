@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/lazarljubenovic/ngx-sin/compare/v0.0.9...v0.1.0) (2017-10-07)
+
+
+### Features
+
+* **ngxSin:** add an "ngxSinName" input to specify control in a less verbose way when inside a control container ([74fb0a9](https://github.com/lazarljubenovic/ngx-sin/commit/74fb0a9))
+* add class on logically invalid element ([a7cae53](https://github.com/lazarljubenovic/ngx-sin/commit/a7cae53))
+* differentiate between the control with error and the tracked control ([9a336a0](https://github.com/lazarljubenovic/ngx-sin/commit/9a336a0))
+
+
+
 <a name="0.0.9"></a>
 ## [0.0.9](https://github.com/lazarljubenovic/ngx-sin/compare/v0.0.8...v0.0.9) (2017-10-07)
 
