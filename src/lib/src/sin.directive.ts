@@ -1,24 +1,10 @@
 // tslint:disable:max-line-length
-import {
-  Directive,
-  DoCheck,
-  EmbeddedViewRef,
-  Inject,
-  Input,
-  isDevMode,
-  OnInit,
-  Optional,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core'
+import {Directive, DoCheck, EmbeddedViewRef, Inject, Input, isDevMode, OnInit, Optional, TemplateRef, ViewContainerRef} from '@angular/core'
 import {AbstractControl, ControlContainer} from '@angular/forms'
-import 'rxjs/add/operator/startWith'
-import 'rxjs/add/operator/merge'
-import 'rxjs/add/observable/fromEvent'
 import {SIN_FULL_CONFIG} from './sin-config'
 import {SinsDirective} from './sins.directive'
 import {SinModuleConfig, WhenFunction, WhenObject} from './interfaces'
-import {Subject} from 'rxjs/Subject'
+import {BehaviorSubject} from 'rxjs/BehaviorSubject'
 // tsling:enable:max-line-length
 
 export interface SinNotification {
@@ -29,6 +15,8 @@ export interface SinNotification {
 
 @Directive({selector: '[ngxSin]'})
 export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
+
+  public visible$ = new BehaviorSubject<AbstractControl | null>(null)
 
   private _control: AbstractControl
   private _controlWithErrors: AbstractControl
@@ -58,8 +46,6 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
   }
 
   @Input('ngxSinWhen') when: WhenFunction
-
-  public errorChanges$ = new Subject<SinNotification>()
 
   private embeddedViewRef: EmbeddedViewRef<any>
   private initialized: boolean = false
@@ -145,8 +131,8 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   private create() {
     if (this.embeddedViewRef == null) {
+      this.visible$.next(this.control)
       const error = this.controlWithErrors.errors[this.error]
-      this.errorChanges$.next({type: 'add', control: this.control, error})
       this.embeddedViewRef = this.viewContainerRef
         .createEmbeddedView(this.templateRef, {$implicit: error})
     }
@@ -154,8 +140,7 @@ export class SinDirective implements OnInit, DoCheck, SinModuleConfig {
 
   private destroy() {
     if (this.embeddedViewRef != null) {
-      this.errorChanges$
-        .next({type: 'remove', error: this.embeddedViewRef.context, control: this.control})
+      this.visible$.next(null)
       this.embeddedViewRef.destroy()
       this.embeddedViewRef = null
     }
