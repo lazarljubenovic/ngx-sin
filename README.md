@@ -1,3 +1,8 @@
+# DEPRECATED
+
+# MERGED WITH https://github.com/lazarljubenovic/ngx-common-forms
+
+
 # Sin
 
 > **sin**
